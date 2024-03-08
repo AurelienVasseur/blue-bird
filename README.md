@@ -1,6 +1,12 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 🐥 The project
+
+This project is a Twitter clone using on `Next.js` and `Supabase`.
+It has been built based on this [tutorial](https://egghead.io/courses/build-a-twitter-clone-with-the-next-js-app-router-and-supabase-19bebadb).
 
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
 
 First, run the development server:
 
@@ -16,21 +22,35 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Notes
 
-## Learn More
+To generate TS types from database: `npx supabase gen types typescript --project-id mfdswqcibveetpfstogt > src/lib/database.types.ts`
 
-To learn more about Next.js, take a look at the following resources:
+### Deal with trigger creation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tuto to fix trigger creation issue: https://www.youtube.com/watch?v=mcrqn77lUmM
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```pgsql
+// Via Supabase SQL Editor
 
-## Deploy on Vercel
+create trigger on_auth_user_insert
+  after insert on auth.users
+  for each row execute function public.insert_profile_for_new_user();
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Deal with Optimistic UI (useOptimistic) and Server Action
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[Link](https://www.youtube.com/watch?v=PPOw-sDeoNw) to a tutorial.
+
+### Deal with Dynamic build issue
+
+An error is raised on build where we use `cookies` (on Supabase auth) because Nextjs want by default to define these files as statics and cache them.
+To fix that we must specify explicitlty that these file are dynamic by adding (cf. page.tsx for example):
+```js
+export const dynamic = "force-dynamic";
+```
+
+### Deal with Linter issue
+
+Linter may raise an error concerning the file `database.types.ts`. To fix that we can create a `.eslintignore` and specify the file.
