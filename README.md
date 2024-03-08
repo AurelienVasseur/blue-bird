@@ -54,3 +54,10 @@ export const dynamic = "force-dynamic";
 ### Deal with Linter issue
 
 Linter may raise an error concerning the file `database.types.ts`. To fix that we can create a `.eslintignore` and specify the file.
+
+
+### Sources
+
+Logos sources:
+- [Feather icons](https://feathericons.com/)
+- [GitHub](https://github.com/logos)
